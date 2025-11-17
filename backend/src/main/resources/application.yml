@@ -7,9 +7,44 @@ spring:
 
   jpa:
     hibernate:
-
       ddl-auto: update
-
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
 
 
+# JWT
+#jwt:
+#  secret: 256
+#  expiration: 86400000
+
+# Security
+security:
+  max-failed-attempts: 5
+  lock-duration-minutes: 30
+
+
+container:
+  pool:
+    # 기본 풀 설정
+    initial-size: 20              # 시작 시 20개 (10초)
+    min-idle: 10                  # 최소 10개 대기
+    max-size: 250                 # 최대 250개 제한
+
+    # 오토스케일링
+    scale-up-threshold: 0.8       # 80% 사용 시 증가
+    scale-down-threshold: 0.3     # 30% 이하 시 감소
+    scale-up-count: 10            # 10개씩 증가
+    scale-down-count: 5           # 5개씩 감소
+
+    # 타임아웃
+    max-idle-time-minutes: 15     # 15분 유휴 시 회수
+    max-session-time-hours: 8     # 8시간 최대 세션
+
+    # 적극적 정리
+    aggressive-cleanup: true
+
+    # 헬스체크
+    health-check-interval-minutes: 10
