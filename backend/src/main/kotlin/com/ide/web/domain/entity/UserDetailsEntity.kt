@@ -1,13 +1,12 @@
-package com.ide.web.security
+package com.ide.web.domain.entity
 
 
-import com.ide.web.domain.entity.UserEntity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.UUID
 
-class CustomUserDetails(
+class UserDetailsEntity(
     private val user: UserEntity
 ) : UserDetails {
 

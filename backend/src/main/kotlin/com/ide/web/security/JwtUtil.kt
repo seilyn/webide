@@ -1,8 +1,8 @@
 package com.ide.web.security
 
+import com.ide.web.domain.entity.UserDetailsEntity
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
@@ -17,7 +17,7 @@ class JwtUtil {
     private lateinit var secret: String
 
     @Value("\${jwt.expiration}")
-    private var expiration: Long = 86400000 // 24 hours
+    private var expiration: Long = 86400000
 
     private fun getSigningKey(): SecretKey {
         return Keys.hmacShaKeyFor(secret.toByteArray())
@@ -26,7 +26,7 @@ class JwtUtil {
     fun generateToken(userDetails: UserDetails): String {
         val claims = mutableMapOf<String, Any>()
 
-        if (userDetails is CustomUserDetails) {
+        if (userDetails is UserDetailsEntity) {
             claims["userId"] = userDetails.getUserId().toString()
             claims["userPublicId"] = userDetails.getUserPublicId()
             claims["email"] = userDetails.getEmail()
@@ -41,11 +41,11 @@ class JwtUtil {
         val expiryDate = Date(now.time + expiration)
 
         return Jwts.builder()
-            .setClaims(claims)
-            .setSubject(subject)
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+            .claims(claims)
+            .subject(subject)
+            .issuedAt(now)
+            .expiration(expiryDate)
+            .signWith(getSigningKey())
             .compact()
     }
 
@@ -63,11 +63,11 @@ class JwtUtil {
     }
 
     private fun extractAllClaims(token: String): Claims {
-        return Jwts.parserBuilder()
-            .setSigningKey(getSigningKey())
+        return Jwts.parser()
+            .verifyWith(getSigningKey())
             .build()
-            .parseClaimsJws(token)
-            .body
+            .parseSignedClaims(token)
+            .payload
     }
 
     private fun isTokenExpired(token: String): Boolean {
