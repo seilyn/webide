@@ -1,4 +1,4 @@
-package com.ide.web.security
+package com.ide.web.infrastructure.security
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

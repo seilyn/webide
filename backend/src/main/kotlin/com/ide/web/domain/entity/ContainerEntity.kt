@@ -1,6 +1,6 @@
 package com.ide.web.domain.entity
 
-import com.ide.web.util.NanoIdGenerator
+import com.ide.web.common.util.NanoIdGenerator
 import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.util.UUID

@@ -3,7 +3,8 @@ package com.ide.web.domain.entity
 import com.ide.web.domain.entity.BaseEntity
 import com.ide.web.domain.entity.ContainerEntity
 import com.ide.web.domain.entity.ProjectEntity
-import com.ide.web.util.NanoIdGenerator
+import com.ide.web.common.util.NanoIdGenerator
+import com.ide.web.domain.dto.UserResDto
 import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.util.UUID

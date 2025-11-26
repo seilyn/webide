@@ -1,4 +1,4 @@
-package com.ide.web.domain.service
+package com.ide.web.infrastructure.security
 
 import com.ide.web.domain.entity.UserDetailsEntity
 import com.ide.web.domain.repository.UserRepository

@@ -1,4 +1,4 @@
-package com.ide.web.config
+package com.ide.web.domain.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 data class ContainerPoolConfig(
     var initialSize: Int = 20,              // 시작 시 20개
     var minIdle: Int = 10,                  // 최소 10개 대기
-    var maxSize: Int = 250,                 // 최대 250개
+    var maxSize: Int = 250,                 // 최대 250개로함
 
     // 오토스케일링
     var scaleUpThreshold: Double = 0.8,     // 80% 사용 시 증가
@@ -24,5 +24,5 @@ data class ContainerPoolConfig(
     var maxSessionTimeHours: Int = 8,       // 8시간 세션 제한
 
     // 청소
-    var aggressiveCleanup: Boolean = true   // 적극적 정리
+    var aggressiveCleanup: Boolean = true
 )

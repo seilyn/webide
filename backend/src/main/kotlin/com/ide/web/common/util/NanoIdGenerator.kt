@@ -1,4 +1,4 @@
-package com.ide.web.util
+package com.ide.web.common.util
 
 import java.security.SecureRandom
 
