@@ -19,8 +19,6 @@
 ### Web IDE Core
 - 실시간 코드 편집
 - 프로젝트/파일 기반 워크스페이스
-- 언어별 Docker 기반 런타임
-- compile/execute command 기반 코드 실행
 
 ---
 
