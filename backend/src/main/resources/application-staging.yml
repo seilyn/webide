@@ -1,0 +1,44 @@
+spring:
+  config:
+    activate:
+      on-profile: staging
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://staging-db:3306/webide_staging
+#    username: webide_stg
+#    password: webide_stg_pw
+
+  jpa:
+    hibernate:
+      ddl-auto: update         # 필요하면 validate 로 바꿔도 됨
+    show-sql: false            # 스테이징은 보통 끄거나 로그 레벨로 조절
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+jwt:
+  expiration: 86400000
+  refresh-expiration: 86400000
+
+security:
+  max-failed-attempts: 5
+  lock-duration-minutes: 30
+
+container:
+  pool:
+    initial-size: 30
+    min-idle: 15
+    max-size: 300
+
+    scale-up-threshold: 0.75
+    scale-down-threshold: 0.35
+    scale-up-count: 15
+    scale-down-count: 5
+
+    max-idle-time-minutes: 20
+    max-session-time-hours: 8
+
+    aggressive-cleanup: true
+    health-check-interval-minutes: 10
