@@ -14,7 +14,7 @@ import java.util.UUID
         Index(name = "idx_execution_public_id", columnList = "execution_public_id")
     ]
 )
-data class ExecutionHistoryEntity(
+class ExecutionHistoryEntity(
     @Id
     @Column(name = "execution_id", columnDefinition = "BINARY(16)")
     var executionId: UUID? = null,

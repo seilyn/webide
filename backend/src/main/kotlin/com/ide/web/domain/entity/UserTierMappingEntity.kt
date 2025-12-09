@@ -12,7 +12,7 @@ import java.util.*
         Index(name = "idx_expires_at", columnList = "expires_at")
     ]
 )
-data class UserTierMappingEntity(
+class UserTierMappingEntity(
 
     @Id
     @Column(name = "mapping_id", columnDefinition = "BINARY(16)")

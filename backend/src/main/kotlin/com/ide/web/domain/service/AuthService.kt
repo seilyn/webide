@@ -1,13 +1,12 @@
 package com.ide.web.domain.service
 
-import com.ide.web.common.exception.InvalidCredentialsException
-import com.ide.web.common.exception.UserAlreadyExistsException
-import com.ide.web.common.exception.UserLockedException
-import com.ide.web.common.exception.UserNotFoundException
+import com.ide.web.common.exception.*
 import com.ide.web.domain.dto.*
+import com.ide.web.domain.entity.LoginHistoryEntity
 import com.ide.web.domain.entity.UserDetailsEntity
 import com.ide.web.domain.entity.UserEntity
 import com.ide.web.domain.mapper.toDto
+import com.ide.web.domain.repository.LoginHistoryRepository
 import com.ide.web.domain.repository.UserRepository
 import com.ide.web.infrastructure.security.JwtUtil
 import org.springframework.beans.factory.annotation.Value
@@ -17,7 +16,6 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 import java.time.LocalDateTime
 
 @Service
@@ -26,6 +24,7 @@ class AuthService (
     private val passwordEncoder: PasswordEncoder,
     private val jwtUtil: JwtUtil,
     private val authenticationManager: AuthenticationManager,
+    private val loginHistoryRepository: LoginHistoryRepository,
 ) {
     @Value("\${jwt.expiration}")
     private var jwtExpiration: Long = 86400000
@@ -70,9 +69,18 @@ class AuthService (
             user = savedUser.toDto()
         )
     }
-    
-    @Transactional
-    fun signin(request: SignInReqDto): SignInResDto {
+
+    /**
+     * 로그인 처리
+     */
+    //@Transactional
+    @Transactional(noRollbackFor = [InvalidCredentialsException::class])
+    fun signin(request: SignInReqDto,
+               clientIp: String?,
+               userAgent: String?,
+               os: String?,
+               browser: String?,
+               device: String?): SignInResDto {
         val user = userRepository.findByEmail(request.email)
             ?: throw UserNotFoundException()
 
@@ -86,6 +94,7 @@ class AuthService (
 
             resetFailedAttempts(user)
             updateLastLogin(user)
+            recordLoginHistory(user, clientIp, userAgent, os, browser, device, success = true, failReason = null)
 
             val userDetails = UserDetailsEntity(user)
             val token = jwtUtil.generateToken(userDetails)
@@ -98,9 +107,20 @@ class AuthService (
                 user = user.toDto()
             )
         } catch (e: AuthenticationException) {
-            handleFailedLogin(user)
-            throw InvalidCredentialsException()
+            val failedCount = handleFailedLogin(user)
+            recordLoginHistory(
+                user,
+                clientIp,
+                userAgent,
+                os,
+                browser,
+                device,
+                success = false,
+                failReason = ErrorCode.AUTH_INVALID_CREDENTIALS.code
+            )
+            throw InvalidCredentialsException(failedCount)
         }
+
 
     }
     /**
@@ -132,7 +152,7 @@ class AuthService (
      * @param user 로그인 실패 처리 대상 사용자 엔티티
      * @return Unit
      */
-    private fun handleFailedLogin(user: UserEntity) {
+    private fun handleFailedLogin(user: UserEntity): Int {
         user.failedLoginCount++
 
         if (user.failedLoginCount >= maxFailedAttempts) {
@@ -140,7 +160,9 @@ class AuthService (
         }
 
         userRepository.save(user)
+        return user.failedLoginCount
     }
+
 
     /**
      * 사용자 최종 로그인 시간을 업데이트
@@ -169,4 +191,32 @@ class AuthService (
             userRepository.save(user)
         }
     }
+
+    /**
+     * 로그인 시 기록용 함수
+     */
+    private fun recordLoginHistory(
+        user: UserEntity,
+        ip: String?,
+        ua: String?,
+        os: String? = null,
+        browser: String? = null,
+        device: String? = null,
+        success: Boolean,
+        failReason: String? = null
+    ) {
+        val history = LoginHistoryEntity(
+            user = user,
+            ipAddress = ip,
+            userAgent = ua,
+            os = os,
+            browser = browser,
+            device = device,
+            isSuccess = success,
+            failReason = failReason
+        )
+
+        loginHistoryRepository.save(history)
+    }
+
 }

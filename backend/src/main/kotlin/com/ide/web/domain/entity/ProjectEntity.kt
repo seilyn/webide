@@ -11,7 +11,7 @@ import java.util.*
         Index(name = "idx_project_public_id", columnList = "project_public_id"),
         Index(name = "idx_project_public_id", columnList = "project_public_id"),
     ])
-data class ProjectEntity(
+class ProjectEntity(
     @Id
     @Column(name = "project_id", columnDefinition = "BINARY(16)")
     var projectId: UUID? = null,

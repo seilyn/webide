@@ -17,7 +17,7 @@ import java.util.UUID
         Index(name = "idx_user_public_id", columnList = "user_public_id")
     ]
 )
-data class UserEntity(
+class UserEntity(
     @Id
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
     var userId: UUID? = null,
@@ -67,7 +67,13 @@ data class UserEntity(
     @Column(name = "storage_used_mb")
     var storageUsedMb: Int? = null,
 
-    // Relationships
+    @Column(name = "last_login_ip", length = 45)
+    var lastLoginIp: String? = null,
+
+    @Column(name = "last_login_ua", length = 500)
+    var lastLoginUserAgent: String? = null,
+
+// Relationships
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val containers: MutableList<ContainerEntity> = mutableListOf(),
 

@@ -49,6 +49,9 @@ dependencies {
 	// Development
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+	// ua parser
+	implementation("eu.bitwalker:UserAgentUtils:1.21")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.security:spring-security-test")

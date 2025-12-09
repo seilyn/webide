@@ -13,7 +13,7 @@ import java.util.*
         Index(name = "idx_container_id", columnList = "container_id")
     ]
 )
-data class ResourceUsageLogEntity(
+class ResourceUsageLogEntity(
 
     @Id
     @Column(name = "resource_usage_log_id", columnDefinition = "BINARY(16)")

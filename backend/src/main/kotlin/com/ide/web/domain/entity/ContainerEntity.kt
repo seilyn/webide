@@ -14,7 +14,7 @@ import java.util.UUID
         Index(name = "idx_container_public_id", columnList = "container_public_id")
     ]
 )
-data class ContainerEntity(
+class ContainerEntity(
     @Id
     @Column(name = "container_id", columnDefinition = "BINARY(16)")
     var containerId: UUID? = null,

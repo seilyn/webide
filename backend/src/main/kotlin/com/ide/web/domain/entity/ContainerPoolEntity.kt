@@ -13,7 +13,7 @@ import java.util.UUID
         Index(name = "idx_assigned_user_id", columnList = "assigned_user_id")
     ]
 )
-data class ContainerPoolEntity(
+class ContainerPoolEntity(
     @Id
     @Column(name = "pool_id", columnDefinition = "BINARY(16)")
     var poolId: UUID? = null,

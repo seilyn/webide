@@ -13,7 +13,7 @@ import java.util.*
     ],
     indexes = [Index(name = "idx_user_id", columnList = "user_id")]
 )
-data class ContainerResourceLimitEntity(
+class ContainerResourceLimitEntity(
 
     @Id
     @Column(name = "container_resource_limit_id", columnDefinition = "BINARY(16)")

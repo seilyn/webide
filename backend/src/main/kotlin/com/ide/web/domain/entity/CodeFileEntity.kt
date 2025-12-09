@@ -13,7 +13,7 @@ import java.util.*
         Index(name = "idx_file_public_id", columnList = "file_public_id")
     ]
 )
-data class CodeFileEntity(
+class CodeFileEntity(
     @Id
     @Column(name = "file_id", columnDefinition = "BINARY(16)")
     var fileId: UUID? = null,

@@ -1,7 +1,6 @@
 package com.ide.web.domain.entity
 
 
-import com.ide.web.domain.entity.UserEntity
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.util.*
@@ -10,11 +9,11 @@ import java.util.*
 @Table(
     name = "monthly_usage_summary",
     uniqueConstraints = [
-        UniqueConstraint(name = "unique_user_month", columnNames = ["user_id", "year_month"])
+        UniqueConstraint(name = "unique_user_month", columnNames = ["user_id", "usage_year_month"])
     ],
-    indexes = [Index(name = "idx_year_month", columnList = "year_month")]
+    indexes = [Index(name = "idx_year_month", columnList = "usage_year_month")]
 )
-data class MonthlyUsageSummaryEntity(
+class MonthlyUsageSummaryEntity(
 
     @Id
     @Column(name = "monthly_usage_summary_id", columnDefinition = "BINARY(16)")
@@ -24,8 +23,8 @@ data class MonthlyUsageSummaryEntity(
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     var user: UserEntity,
 
-    @Column(name = "year_month", nullable = false, length = 7)
-    var yearMonth: String,
+    @Column(name = "usage_year_month", nullable = false, length = 7)
+    var usageYearMonth: String,
 
     @Column(name = "total_executions")
     var totalExecutions: Int = 0,
